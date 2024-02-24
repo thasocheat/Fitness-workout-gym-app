@@ -10,15 +10,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        tools:targetApi="31"
         android:theme="@style/Theme.Fitness_Tracker"
-        >
+        tools:targetApi="31">
         <activity
-            android:name=".workout_summary"
-            android:label="@string/title_activity_workout_summary" >
-        </activity>
-        <activity android:name=".TutorialPlayback" />
-<!--        <activity android:name=".fragments.rvLearnFragmentNotFrag" />-->
+            android:name=".activity_profile_edit"
+            android:exported="false" />
+        <!-- <activity -->
+        <!-- android:name=".workout_summary" -->
+        <!-- android:label="@string/title_activity_workout_summary" > -->
+        <!-- </activity> -->
+        <!-- <activity android:name=".TutorialPlayback" /> -->
+        <!-- <activity android:name=".fragments.rvLearnFragmentNotFrag" /> -->
         <activity android:name=".activity_signup" />
         <activity
             android:name=".activity_login"
@@ -29,8 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".workout_timer" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

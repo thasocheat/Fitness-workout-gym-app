@@ -24,7 +24,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+//import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+
+import com.example.fitnessworkoutgymapp.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,17 +34,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import edu.csueb.codepath.fitness_tracker.R;
-import edu.csueb.codepath.fitness_tracker.WorkoutListAdapter;
-import edu.csueb.codepath.fitness_tracker.adapters.LearnListAdapter;
-import edu.csueb.codepath.fitness_tracker.workout_timer;
+//import edu.csueb.codepath.fitness_tracker.R;
+//import edu.csueb.codepath.fitness_tracker.WorkoutListAdapter;
+//import edu.csueb.codepath.fitness_tracker.adapters.LearnListAdapter;
+//import edu.csueb.codepath.fitness_tracker.workout_timer;
 
 public class LearnFragment extends Fragment {
 
     ListView listView;
     RecyclerView rvLearningWorkout;
     CardView cardView;
-    LearnListAdapter learnListAdapter;
+//    LearnListAdapter learnListAdapter;
 
     public LearnFragment() {
         // Required empty public constructor
@@ -97,12 +99,12 @@ public class LearnFragment extends Fragment {
 
 
 
-        rvLearningWorkout = (RecyclerView) view.findViewById(R.id.rvLearnWorkout);
-        cardView = (CardView) view.findViewById(R.id.card_learn_item);
+//        rvLearningWorkout = (RecyclerView) view.findViewById(R.id.rvLearnWorkout);
+//        cardView = (CardView) view.findViewById(R.id.card_learn_item);
 
         rvLearningWorkout.setLayoutManager(new LinearLayoutManager(getContext()));
-        learnListAdapter = new LearnListAdapter(this.getContext(), categories);
-        rvLearningWorkout.setAdapter(learnListAdapter);
+//        learnListAdapter = new LearnListAdapter(this.getContext(), categories);
+//        rvLearningWorkout.setAdapter(learnListAdapter);
 
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

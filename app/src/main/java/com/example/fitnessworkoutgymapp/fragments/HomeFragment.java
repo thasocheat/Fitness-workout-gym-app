@@ -17,11 +17,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
+//import com.parse.FindCallback;
+//import com.parse.ParseException;
+//import com.parse.ParseObject;
+//import com.parse.ParseQuery;
+//import com.parse.ParseUser;
+
+import com.example.fitnessworkoutgymapp.R;
 
 import org.w3c.dom.Text;
 
@@ -30,12 +32,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import edu.csueb.codepath.fitness_tracker.DateSummary;
-import edu.csueb.codepath.fitness_tracker.HomeWorkoutListAdapter;
-import edu.csueb.codepath.fitness_tracker.ProfileEdit;
-import edu.csueb.codepath.fitness_tracker.R;
-import edu.csueb.codepath.fitness_tracker.Workout;
-import edu.csueb.codepath.fitness_tracker.WorkoutListAdapter;
+//import com.example.fitnessworkoutgymapp.DateSummary;
+//import com.example.fitnessworkoutgymapp.HomeWorkoutListAdapter;
+//import com.example.fitnessworkoutgymapp.ProfileEdit;
+//import com.example.fitnessworkoutgymapp.R;
+//import com.example.fitnessworkoutgymapp.Workout;
+//import com.example.fitnessworkoutgymapp.WorkoutListAdapter;
 
 public class HomeFragment extends Fragment {
 
@@ -49,7 +51,7 @@ public class HomeFragment extends Fragment {
     List<String> workout;   //workout name
     List<String> listTime;  //time for each workout
     List<String> indivCalo; //indivial calories per workout
-    HomeWorkoutListAdapter adapter;
+//    HomeWorkoutListAdapter adapter;
     private Double totalCal;
     private int totalTime;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
@@ -79,11 +81,11 @@ public class HomeFragment extends Fragment {
         totalCal = 0.0;
 
         rvWorkouts = (RecyclerView) view.findViewById(R.id.rvWorkouts);
-        adapter = new HomeWorkoutListAdapter(workout, listTime, indivCalo,this);
+//        adapter = new HomeWorkoutListAdapter(workout, listTime, indivCalo,this);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvWorkouts.setAdapter(adapter);
+//        rvWorkouts.setAdapter(adapter);
 
-        populateWorkout();
+//        populateWorkout();
 
 
         tvCalories.setText(String.valueOf(df2.format(totalCal)));
@@ -104,62 +106,62 @@ public class HomeFragment extends Fragment {
         // After login, Parse will cache it on disk, so
         // we don't need to login every time we open this
         // application
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            // do stuff with the user
-        } else {
-            // show the signup or login screen
-        }
-        this.tvUserName.setText("Hello " + (currentUser.getUsername()));
-        this.tvDate.setText(DateSummary.getDate());
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        if (currentUser != null) {
+//            // do stuff with the user
+//        } else {
+//            // show the signup or login screen
+//        }
+//        this.tvUserName.setText("Hello " + (currentUser.getUsername()));
+//        this.tvDate.setText(DateSummary.getDate());
     }
 
-    public void populateWorkout() {
-        ParseQuery<Workout> query = ParseQuery.getQuery("Workout");
-        query.include(Workout.KEY_USER);
-        query.whereEqualTo(Workout.KEY_USER, ParseUser.getCurrentUser());
-        query.setLimit(20);
-        //query.whereEqualTo("createdAt", new Date());
-        query.findInBackground(new FindCallback<Workout>() {
-            @Override
-            public void done(List<Workout> objects, ParseException e) {
-                int min = 0;
-                int sec = 0;
-                if(e != null){
-                    Log.e(TAG, "Error populating workouts", e);
-                    return;
-                }
-                for(Workout w: objects){
-                    workout.add((String) w.get("WorkoutType"));  //POSSIBLE BUGs
-                    listTime.add((String) w.get("duration"));
-                    indivCalo.add(String.valueOf(w.get("calories")));
-                    totalCal += ((Double) w.get("calories"));
-
-                    String temp = (String) w.get("duration");
-                    Log.i(TAG, "duration: " + temp);
-                    String[] time = temp.split(":");
-                    min = Integer.parseInt(time[0]);
-                    sec = Integer.parseInt(time[1]);
-                    totalTime += (min * 60) + sec;
-                    Log.i(TAG, "Time: " + String.valueOf(totalTime));
-                }
-
-                Log.e(TAG, String.valueOf(totalCal));
-                tvCalories.setText(String.valueOf(df2.format(totalCal)));
-                String finalSec = "";
-                if((totalTime % 60) < 9){
-                    finalSec = "0" + String.valueOf(totalTime % 60);
-                } else {
-                    finalSec = String.valueOf(totalTime % 60);
-                }
-
-                String finalTime = String.valueOf(totalTime / 60) + ":" + String.valueOf(finalSec);
-                tvActivity.setText(finalTime);
-
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-    }
+//    public void populateWorkout() {
+//        ParseQuery<Workout> query = ParseQuery.getQuery("Workout");
+//        query.include(Workout.KEY_USER);
+//        query.whereEqualTo(Workout.KEY_USER, ParseUser.getCurrentUser());
+//        query.setLimit(20);
+//        //query.whereEqualTo("createdAt", new Date());
+//        query.findInBackground(new FindCallback<Workout>() {
+//            @Override
+//            public void done(List<Workout> objects, ParseException e) {
+//                int min = 0;
+//                int sec = 0;
+//                if(e != null){
+//                    Log.e(TAG, "Error populating workouts", e);
+//                    return;
+//                }
+//                for(Workout w: objects){
+//                    workout.add((String) w.get("WorkoutType"));  //POSSIBLE BUGs
+//                    listTime.add((String) w.get("duration"));
+//                    indivCalo.add(String.valueOf(w.get("calories")));
+//                    totalCal += ((Double) w.get("calories"));
+//
+//                    String temp = (String) w.get("duration");
+//                    Log.i(TAG, "duration: " + temp);
+//                    String[] time = temp.split(":");
+//                    min = Integer.parseInt(time[0]);
+//                    sec = Integer.parseInt(time[1]);
+//                    totalTime += (min * 60) + sec;
+//                    Log.i(TAG, "Time: " + String.valueOf(totalTime));
+//                }
+//
+//                Log.e(TAG, String.valueOf(totalCal));
+//                tvCalories.setText(String.valueOf(df2.format(totalCal)));
+//                String finalSec = "";
+//                if((totalTime % 60) < 9){
+//                    finalSec = "0" + String.valueOf(totalTime % 60);
+//                } else {
+//                    finalSec = String.valueOf(totalTime % 60);
+//                }
+//
+//                String finalTime = String.valueOf(totalTime / 60) + ":" + String.valueOf(finalSec);
+//                tvActivity.setText(finalTime);
+//
+//                adapter.notifyDataSetChanged();
+//            }
+//        });
+//
+//    }
 
 }
