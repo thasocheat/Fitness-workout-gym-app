@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -12,13 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Fitness_Tracker"
         tools:targetApi="31">
-        <activity
-            android:name=".activity_profile_edit"
-            android:exported="false" />
-        <!-- <activity -->
-        <!-- android:name=".workout_summary" -->
-        <!-- android:label="@string/title_activity_workout_summary" > -->
-        <!-- </activity> -->
+
+         <activity
+         android:name=".workout_summary"
+         android:label="@string/title_activity_workout_summary" >
+         </activity>
         <!-- <activity android:name=".TutorialPlayback" /> -->
         <!-- <activity android:name=".fragments.rvLearnFragmentNotFrag" /> -->
         <activity android:name=".activity_signup" />
@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".workout_timer" />
     </application>
 
 </manifest>

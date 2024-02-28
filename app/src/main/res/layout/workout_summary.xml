@@ -38,8 +38,8 @@
         android:layout_marginTop="50dp"
         android:background="@color/bottom_navigation_selector"
         android:backgroundTint="#FFFFFF"
-        android:tint="@color/bottom_navigation_selector"
-        android:src="@drawable/workout_man" />
+        android:src="@drawable/workout_man"
+        app:tint="@color/bottom_navigation_selector" />
 
     <TextView
         android:id="@+id/tvWorkout_summary"
@@ -62,8 +62,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="25dp"
-        android:tint="@color/bottom_navigation_selector"
-        android:src="@drawable/ic_time" />
+        android:src="@drawable/ic_time"
+        app:tint="@color/bottom_navigation_selector" />
 
     <TextView
         android:id="@+id/tvWorkoutTimeSummary"
@@ -85,8 +85,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="25dp"
-        android:tint="@color/bottom_navigation_selector"
-        android:src="@drawable/ic_burned" />
+        android:src="@drawable/ic_burned"
+        app:tint="@color/bottom_navigation_selector" />
 
     <TextView
         android:id="@+id/tvCaloriesDisplay"

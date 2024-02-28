@@ -1,15 +1,12 @@
 package com.example.fitnessworkoutgymapp.fragments;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,27 +14,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import com.parse.FindCallback;
-//import com.parse.ParseException;
-//import com.parse.ParseObject;
-//import com.parse.ParseQuery;
-//import com.parse.ParseUser;
-
+import com.example.fitnessworkoutgymapp.DateSummary;
+import com.example.fitnessworkoutgymapp.HomeWorkoutListAdapter;
 import com.example.fitnessworkoutgymapp.R;
-
-import org.w3c.dom.Text;
+import com.example.fitnessworkoutgymapp.SQLiteDbManager;
+import com.example.fitnessworkoutgymapp.UserModel;
+import com.example.fitnessworkoutgymapp.Workout;
+import com.example.fitnessworkoutgymapp.activity_signup;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-//import com.example.fitnessworkoutgymapp.DateSummary;
-//import com.example.fitnessworkoutgymapp.HomeWorkoutListAdapter;
-//import com.example.fitnessworkoutgymapp.ProfileEdit;
-//import com.example.fitnessworkoutgymapp.R;
-//import com.example.fitnessworkoutgymapp.Workout;
-//import com.example.fitnessworkoutgymapp.WorkoutListAdapter;
 
 public class HomeFragment extends Fragment {
 
@@ -51,7 +38,7 @@ public class HomeFragment extends Fragment {
     List<String> workout;   //workout name
     List<String> listTime;  //time for each workout
     List<String> indivCalo; //indivial calories per workout
-//    HomeWorkoutListAdapter adapter;
+    HomeWorkoutListAdapter adapter;
     private Double totalCal;
     private int totalTime;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
@@ -70,6 +57,8 @@ public class HomeFragment extends Fragment {
         //setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+
         tvUserName = (TextView) view.findViewById(R.id.tvUserName);
         tvDate = (TextView) view.findViewById(R.id.tvDate);
         tvCalories = (TextView) view.findViewById(R.id.tvCalories);
@@ -81,11 +70,14 @@ public class HomeFragment extends Fragment {
         totalCal = 0.0;
 
         rvWorkouts = (RecyclerView) view.findViewById(R.id.rvWorkouts);
-//        adapter = new HomeWorkoutListAdapter(workout, listTime, indivCalo,this);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(getContext()));
-//        rvWorkouts.setAdapter(adapter);
 
-//        populateWorkout();
+// Initialize the adapter
+        adapter = new HomeWorkoutListAdapter(workout, listTime, indivCalo, this);
+        rvWorkouts.setAdapter(adapter);
+
+        populateWorkout();
+
 
 
         tvCalories.setText(String.valueOf(df2.format(totalCal)));
@@ -106,62 +98,79 @@ public class HomeFragment extends Fragment {
         // After login, Parse will cache it on disk, so
         // we don't need to login every time we open this
         // application
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        if (currentUser != null) {
-//            // do stuff with the user
-//        } else {
-//            // show the signup or login screen
-//        }
-//        this.tvUserName.setText("Hello " + (currentUser.getUsername()));
-//        this.tvDate.setText(DateSummary.getDate());
+
+        SQLiteDbManager dbManager = new SQLiteDbManager(getContext(), "fitness_db.db", null, 1);
+
+        // Retrieve the current user from the database
+        UserModel currentUser = dbManager.getCurrentUser();
+
+        // Check if the current user exists
+        if (currentUser != null) {
+            // If the current user exists, set the username in tvUserName TextView
+            // and set the current date in tvDate TextView
+            tvUserName.setText("Hello " + currentUser.getUsername());
+            tvDate.setText(DateSummary.getDate()); // Assuming DateSummary is a class providing date-related functionality
+        } else {
+            // If the current user doesn't exist, show the signup or login screen
+            Toast.makeText(getContext(), "Please login first", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
-//    public void populateWorkout() {
-//        ParseQuery<Workout> query = ParseQuery.getQuery("Workout");
-//        query.include(Workout.KEY_USER);
-//        query.whereEqualTo(Workout.KEY_USER, ParseUser.getCurrentUser());
-//        query.setLimit(20);
-//        //query.whereEqualTo("createdAt", new Date());
-//        query.findInBackground(new FindCallback<Workout>() {
-//            @Override
-//            public void done(List<Workout> objects, ParseException e) {
-//                int min = 0;
-//                int sec = 0;
-//                if(e != null){
-//                    Log.e(TAG, "Error populating workouts", e);
-//                    return;
-//                }
-//                for(Workout w: objects){
-//                    workout.add((String) w.get("WorkoutType"));  //POSSIBLE BUGs
-//                    listTime.add((String) w.get("duration"));
-//                    indivCalo.add(String.valueOf(w.get("calories")));
-//                    totalCal += ((Double) w.get("calories"));
-//
-//                    String temp = (String) w.get("duration");
-//                    Log.i(TAG, "duration: " + temp);
-//                    String[] time = temp.split(":");
-//                    min = Integer.parseInt(time[0]);
-//                    sec = Integer.parseInt(time[1]);
-//                    totalTime += (min * 60) + sec;
-//                    Log.i(TAG, "Time: " + String.valueOf(totalTime));
-//                }
-//
-//                Log.e(TAG, String.valueOf(totalCal));
-//                tvCalories.setText(String.valueOf(df2.format(totalCal)));
-//                String finalSec = "";
-//                if((totalTime % 60) < 9){
-//                    finalSec = "0" + String.valueOf(totalTime % 60);
-//                } else {
-//                    finalSec = String.valueOf(totalTime % 60);
-//                }
-//
-//                String finalTime = String.valueOf(totalTime / 60) + ":" + String.valueOf(finalSec);
-//                tvActivity.setText(finalTime);
-//
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-//
-//    }
+    public void populateWorkout() {
+        SQLiteDbManager dbManager = new SQLiteDbManager(getContext(), "fitness_db.db", null, 1);
+        UserModel currentUser = dbManager.getCurrentUser();
+
+        int userId = currentUser.getId();
+
+        // Retrieve workout data from SQLite database
+        List<Workout> workoutList = dbManager.getAllWorkouts(userId); // Implement this method in your SQLiteDbManager class
+
+        // Clear existing data
+        workout.clear();
+        listTime.clear();
+        indivCalo.clear();
+        totalCal = 0.0;
+        totalTime = 0;
+
+        // Populate lists and calculate total calories and total time
+        for (Workout w : workoutList) {
+            workout.add(w.getWorkoutType());
+            listTime.add(w.getDuration());
+            indivCalo.add(String.valueOf(w.getCalories()));
+            totalCal += w.getCalories();
+
+            String duration = w.getDuration();
+            if (!duration.isEmpty()) {
+                String[] timeParts = duration.split(":");
+                if (timeParts.length == 2) {
+                    int minutes = Integer.parseInt(timeParts[0]);
+                    int seconds = Integer.parseInt(timeParts[1]);
+                    totalTime += (minutes * 60) + seconds;
+                } else {
+                    Log.e(TAG, "Invalid duration format: " + duration);
+                }
+            } else {
+                Log.e(TAG, "Duration is empty");
+            }
+
+        }
+
+        // Update UI
+        tvCalories.setText(String.valueOf(df2.format(totalCal)));
+        String finalSec = "";
+        if ((totalTime % 60) < 10) {
+            finalSec = "0" + String.valueOf(totalTime % 60);
+        } else {
+            finalSec = String.valueOf(totalTime % 60);
+        }
+        String finalTime = totalTime / 60 + ":" + finalSec;
+        tvActivity.setText(finalTime);
+
+        // Notify adapter
+        adapter.notifyDataSetChanged();
+
+    }
 
 }

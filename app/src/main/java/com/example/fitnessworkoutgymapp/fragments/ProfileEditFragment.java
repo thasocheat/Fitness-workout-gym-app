@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,8 @@ public class ProfileEditFragment extends Fragment {
 
             // Check if profile image URL is available
             String profileImageUrl = args.getString("profile_image_url");
+            Log.d("SQLiteDbManager", "Image Path: " + profileImageUrl);
+
             if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
                 // Load profile image using Glide or any other image loading library
                 Glide.with(requireContext()).load(profileImageUrl).into(etProfileImage);
@@ -96,9 +99,15 @@ public class ProfileEditFragment extends Fragment {
                 String newPassword = etPassword.getText().toString();
                 String newWeight = etWeight.getText().toString();
 
+                // Log the new data to verify
+                Log.d("ProfileEditFragment", "New Height: " + newHeight);
+                Log.d("ProfileEditFragment", "New Username: " + newUsername);
+                Log.d("ProfileEditFragment", "New Firstname: " + newFirstname);
+                Log.d("ProfileEditFragment", "New Email: " + newEmail);
+                Log.d("ProfileEditFragment", "New Password: " + newPassword);
+                Log.d("ProfileEditFragment", "New Weight: " + newWeight);
+
                 // Update the user's profile data in the database
-                // You can use your SQLiteDbManager or any other database helper class here
-                // For example:
                 SQLiteDbManager dbManager = new SQLiteDbManager(getActivity(), "fitness_db.db", null, 1);
                 UserModel currentUser = dbManager.getCurrentUser();
                 if (currentUser != null) {
@@ -111,7 +120,7 @@ public class ProfileEditFragment extends Fragment {
                     currentUser.setWeight(Double.parseDouble(newWeight));
 
                     // Save the updated data to the database
-                    dbManager.updateUser(currentUser);
+                    dbManager.updateUser(currentUser.getId(), currentUser);
 
                     // Notify the user that the update was successful
                     Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
@@ -129,8 +138,15 @@ public class ProfileEditFragment extends Fragment {
             if (data != null && data.getData() != null) {
                 // Handle the selected image here (e.g., display a preview)
                 Uri selectedImageUri = data.getData();
+                // Log the selected image URI to verify
+                Log.d("ProfileEditFragment", "Selected Image URI: " + selectedImageUri.toString());
                 // You can display a preview of the selected image in an ImageView
                 etProfileImage.setImageURI(selectedImageUri);
+
+                // Store the image path in SQLite
+                String imagePath = selectedImageUri.toString();
+                SQLiteDbManager dbManager = new SQLiteDbManager(getActivity(), "fitness_db.db", null, 1);
+                dbManager.storeImagePath(imagePath);
             }
         }
     }

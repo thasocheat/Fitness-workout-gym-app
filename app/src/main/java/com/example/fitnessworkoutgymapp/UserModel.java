@@ -8,6 +8,8 @@ package com.example.fitnessworkoutgymapp;
 //import static com.parse.ParseClassName.*;
 
 public class UserModel{
+
+    private int id;
     String firstname;
     String lastname;
     String email;
@@ -123,5 +125,13 @@ public class UserModel{
 
     public String getPassword() {
         return password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

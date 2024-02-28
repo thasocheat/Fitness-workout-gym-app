@@ -1,6 +1,11 @@
 package com.example.fitnessworkoutgymapp.fragments;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 //import com.parse.ParseException;
 //import com.parse.ParseFile;
 //import com.parse.ParseUser;
+import com.bumptech.glide.Glide;
 import com.example.fitnessworkoutgymapp.SQLiteDbManager;
 import com.example.fitnessworkoutgymapp.UserModel;
 import com.example.fitnessworkoutgymapp.activity_login;
@@ -36,6 +43,9 @@ public class ProfileFragment extends Fragment {
     ImageButton btnLogout;
     ImageButton btnEdit;
     String TAG = "ProfileFragment";
+
+    // Request code for runtime permission
+    private static final int REQUEST_PERMISSION_CODE = 1001;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -61,6 +71,8 @@ public class ProfileFragment extends Fragment {
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
         btnLogout = view.findViewById(R.id.btnLogout);
         btnEdit = view.findViewById(R.id.btnEdit);
+
+//        requestStoragePermission();
         // Logout button
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,16 +160,22 @@ public class ProfileFragment extends Fragment {
             // Load profile image if available
             // Assuming you have stored profile image URI in the User object
             String profileImageUri = user.getProfileImageUri();
+            Log.d("SQLiteDbManager", "Image Path: " + profileImageUri);
+
             if (profileImageUri != null && !profileImageUri.isEmpty()) {
-                // Load the image using Glide
-                // Use a library like Glide or Picasso to load the image into ImageView
-                // Glide.with(getContext()).load(profileImageUri).into(ivProfileImage);
+                // Load the image using a Bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(profileImageUri);
+                if(bitmap != null){
+                    ivProfileImage.setImageBitmap(bitmap);
+                }else{
+                    // If bitmap is null, handle the error or set a default image
+                    ivProfileImage.setImageResource(R.drawable.default_profile_pic);
+                }
             }else {
 
-                // Load the default image
+                // If bitmap is null, handle the error or set a default image
                 ivProfileImage.setImageResource(R.drawable.default_profile_pic);
             }
-            Toast.makeText(getContext(), "Welcome " + user.getUsername(), Toast.LENGTH_SHORT).show();
         } else {
             // User not found or logged out, handle accordingly
             Toast.makeText(getContext(), "User not found or logged out", Toast.LENGTH_SHORT).show();
@@ -166,4 +184,66 @@ public class ProfileFragment extends Fragment {
 
         return user;
     }
+
+    // Method to request storage permission
+    private void requestStoragePermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Request the permission
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION_CODE);
+        } else {
+            // Permission has already been granted
+            // You can proceed with accessing the image file
+        }
+    }
+
+    // Override onRequestPermissionsResult to handle permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            // Check if the permission request is granted
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                // You can proceed with accessing the image file
+                loadProfileImage();
+            } else {
+                // Permission is denied
+                // Handle the denial or inform the user
+                Toast.makeText(requireContext(), "Permission denied!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    // Load profile image if permission is granted
+    private void loadProfileImage() {
+        // Load profile image if available
+        // Assuming you have stored profile image URI in the User object
+        SQLiteDbManager dbManager = new SQLiteDbManager(getActivity(), "fitness_db.db", null, 1);
+        UserModel user = dbManager.getCurrentUser();
+
+        String profileImageUri = user.getProfileImageUri();
+        Log.d("SQLiteDbManager", "Image Path: " + profileImageUri);
+
+        if (profileImageUri != null && !profileImageUri.isEmpty()) {
+            // Load the image using a Bitmap
+            Bitmap bitmap = BitmapFactory.decodeFile(profileImageUri);
+            if (bitmap != null) {
+                ivProfileImage.setImageBitmap(bitmap);
+            } else {
+                // If bitmap is null, handle the error or set a default image
+                ivProfileImage.setImageResource(R.drawable.default_profile_pic);
+            }
+        } else {
+            // If bitmap is null, handle the error or set a default image
+            ivProfileImage.setImageResource(R.drawable.default_profile_pic);
+        }
+    }
+
 }
